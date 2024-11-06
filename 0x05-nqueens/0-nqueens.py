@@ -3,9 +3,9 @@ import sys
 
 
 def is_valid(board, row, col):
-    """Check if a queen can be placed on board at (row, col)"""
+    """Check if a queen can be placed on the board at (row, col)."""
     for i in range(row):
-        # Check column and diagonals
+        # Check for same column and both diagonals
         if board[i] == col or \
            board[i] - i == col - row or \
            board[i] + i == col + row:
@@ -14,7 +14,7 @@ def is_valid(board, row, col):
 
 
 def solve_nqueens(n):
-    """Solve the N Queens problem and return all solutions"""
+    """Generate all possible solutions for the N-Queens problem."""
     def backtrack(row, board):
         if row == n:
             solutions.append(board[:])
@@ -23,7 +23,7 @@ def solve_nqueens(n):
             if is_valid(board, row, col):
                 board[row] = col
                 backtrack(row + 1, board)
-                board[row] = -1
+                board[row] = -1  # Reset position
 
     solutions = []
     board = [-1] * n
@@ -32,13 +32,14 @@ def solve_nqueens(n):
 
 
 def print_solutions(solutions):
-    """Print all solutions in the required format"""
+    """Format and print solutions as required."""
     for solution in solutions:
-        print([[i, solution[i]] for i in range(len(solution))])
+        formatted_solution = [[i, solution[i]] for i in range(len(solution))]
+        print(formatted_solution)
 
 
 if __name__ == "__main__":
-    # Check if the right number of arguments is given
+    # Check for correct number of arguments
     if len(sys.argv) != 2:
         print("Usage: nqueens N")
         sys.exit(1)
@@ -50,11 +51,11 @@ if __name__ == "__main__":
         print("N must be a number")
         sys.exit(1)
 
-    # Check if N is at least 4
+    # Ensure N meets the minimum size requirement
     if n < 4:
         print("N must be at least 4")
         sys.exit(1)
 
-    # Solve the N-Queens problem and print solutions
+    # Generate and print solutions
     solutions = solve_nqueens(n)
     print_solutions(solutions)
