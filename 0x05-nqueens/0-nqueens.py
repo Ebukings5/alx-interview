@@ -1,61 +1,39 @@
 #!/usr/bin/python3
+""" N queens """
 import sys
 
 
-def is_valid(board, row, col):
-    """Check if a queen can be placed on the board at (row, col)."""
-    for i in range(row):
-        # Check for same column and both diagonals
-        if board[i] == col or \
-           board[i] - i == col - row or \
-           board[i] + i == col + row:
-            return False
-    return True
+# Argument validation
+if len(sys.argv) != 2:
+    print("Usage: nqueens N")
+    sys.exit(1)
+
+if not sys.argv[1].isdigit():
+    print("N must be a number")
+    sys.exit(1)
+
+n = int(sys.argv[1])
+
+if n < 4:
+    print("N must be at least 4")
+    sys.exit(1)
 
 
-def solve_nqueens(n):
-    """Generate all possible solutions for the N-Queens problem."""
-    def backtrack(row, board):
-        if row == n:
-            solutions.append(board[:])
-            return
-        for col in range(n):
-            if is_valid(board, row, col):
-                board[row] = col
-                backtrack(row + 1, board)
-                board[row] = -1  # Reset position
-
-    solutions = []
-    board = [-1] * n
-    backtrack(0, board)
-    return solutions
+def queens(n, i=0, a=[], b=[], c=[]):
+    """Find all solutions using backtracking."""
+    if i < n:
+        for j in range(n):
+            if j not in a and i + j not in b and i - j not in c:
+                yield from queens(n, i + 1, a + [j], b + [i + j], c + [i - j])
+    else:
+        yield a
 
 
-def print_solutions(solutions):
-    """Format and print solutions as required."""
-    for solution in solutions:
-        formatted_solution = [[i, solution[i]] for i in range(len(solution))]
+def solve(n):
+    """Print solutions in the required format."""
+    for solution in queens(n, 0):
+        formatted_solution = [[i, solution[i]] for i in range(n)]
         print(formatted_solution)
 
 
-if __name__ == "__main__":
-    # Check for correct number of arguments
-    if len(sys.argv) != 2:
-        print("Usage: nqueens N")
-        sys.exit(1)
-
-    # Validate that N is an integer
-    try:
-        n = int(sys.argv[1])
-    except ValueError:
-        print("N must be a number")
-        sys.exit(1)
-
-    # Ensure N meets the minimum size requirement
-    if n < 4:
-        print("N must be at least 4")
-        sys.exit(1)
-
-    # Generate and print solutions
-    solutions = solve_nqueens(n)
-    print_solutions(solutions)
+solve(n)
