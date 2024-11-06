@@ -5,6 +5,7 @@ import sys
 def is_valid(board, row, col):
     """Check if a queen can be placed on board at (row, col)"""
     for i in range(row):
+        # Check column and diagonals
         if board[i] == col or \
            board[i] - i == col - row or \
            board[i] + i == col + row:
@@ -13,7 +14,7 @@ def is_valid(board, row, col):
 
 
 def solve_nqueens(n):
-    """Solve the N Queens problem and print all solutions"""
+    """Solve the N Queens problem and return all solutions"""
     def backtrack(row, board):
         if row == n:
             solutions.append(board[:])
@@ -37,19 +38,23 @@ def print_solutions(solutions):
 
 
 if __name__ == "__main__":
+    # Check if the right number of arguments is given
     if len(sys.argv) != 2:
         print("Usage: nqueens N")
         sys.exit(1)
 
+    # Validate that N is an integer
     try:
         n = int(sys.argv[1])
     except ValueError:
         print("N must be a number")
         sys.exit(1)
 
+    # Check if N is at least 4
     if n < 4:
         print("N must be at least 4")
         sys.exit(1)
 
+    # Solve the N-Queens problem and print solutions
     solutions = solve_nqueens(n)
     print_solutions(solutions)
